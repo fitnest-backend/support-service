@@ -1,4 +1,4 @@
-package az.fitnest.supportservice.security;
+package az.fitnest.support.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

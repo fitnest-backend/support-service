@@ -1,4 +1,4 @@
-package az.fitnest.supportservice;
+package az.fitnest.support;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package az.fitnest.supportservice.dto.common;
+package az.fitnest.support.dto.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

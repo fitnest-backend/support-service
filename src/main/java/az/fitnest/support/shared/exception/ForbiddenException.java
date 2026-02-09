@@ -1,4 +1,4 @@
-package az.fitnest.supportservice.exception;
+package az.fitnest.support.exception;
 
 import org.springframework.http.HttpStatus;
 
