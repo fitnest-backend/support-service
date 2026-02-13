@@ -1,4 +1,4 @@
-package az.fitnest.support.security;
+package az.fitnest.support.supportservice.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
