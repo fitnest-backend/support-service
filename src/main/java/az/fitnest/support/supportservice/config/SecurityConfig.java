@@ -50,13 +50,19 @@ public class SecurityConfig {
                     // Return 401 Unauthorized for authentication failures
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.setContentType("application/json");
-                    response.getWriter().write("{\"error\":\"Unauthorized\"}");
+                    String path = request.getRequestURI();
+                    String timestamp = java.time.OffsetDateTime.now().toString();
+                    String json = String.format("{\"error\":{\"code\":\"UNAUTHORIZED\",\"message\":\"Unauthorized\",\"status\":401,\"path\":\"%s\",\"timestamp\":\"%s\"}}", path, timestamp);
+                    response.getWriter().write(json);
                 })
                 .accessDeniedHandler((request, response, accessDeniedException) -> {
                     // Return 403 Forbidden for authorization failures
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                     response.setContentType("application/json");
-                    response.getWriter().write("{\"error\":\"Forbidden\"}");
+                    String path = request.getRequestURI();
+                    String timestamp = java.time.OffsetDateTime.now().toString();
+                    String json = String.format("{\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"Forbidden\",\"status\":403,\"path\":\"%s\",\"timestamp\":\"%s\"}}", path, timestamp);
+                    response.getWriter().write(json);
                 })
             )
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
