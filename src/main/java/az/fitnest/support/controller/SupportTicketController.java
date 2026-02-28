@@ -19,13 +19,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/tickets")
 @RequiredArgsConstructor
-@Tag(name = "Support Ticket", description = "Endpoints for managing user support tickets")
+@Tag(name = "Support Ticket", description = "İstifadəçi dəstək biletlərini idarə etmək üçün ucluqlar")
 @SecurityRequirement(name = "bearerAuth")
 public class SupportTicketController {
 
     private final SupportTicketService ticketService;
 
-    @Operation(summary = "Create Support Ticket", description = "Creates a new support ticket for the authenticated user.")
+    @Operation(summary = "Dəstək bileti yaradın", description = "Autentifikasiya olunmuş istifadəçi üçün yeni dəstək bileti yaradır.")
     @PostMapping
     public ResponseEntity<SupportTicketDto> createTicket(
             @AuthenticationPrincipal Long userId,
@@ -33,17 +33,17 @@ public class SupportTicketController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ticketService.createTicket(userId, request));
     }
 
-    @Operation(summary = "Get User Tickets", description = "Returns all support tickets for the authenticated user.")
+    @Operation(summary = "İstifadəçi biletlərini əldə edin", description = "Autentifikasiya olunmuş istifadəçi üçün bütün dəstək biletlərini qaytarır.")
     @GetMapping
     public ResponseEntity<List<SupportTicketDto>> getUserTickets(@AuthenticationPrincipal Long userId) {
         return ResponseEntity.ok(ticketService.getUserTickets(userId));
     }
 
-    @Operation(summary = "Get Ticket by ID", description = "Returns a specific support ticket by its ID.")
+    @Operation(summary = "Bileti ID vasitəsilə əldə edin", description = "ID-si verilmiş xüsusi dəstək biletini qaytarır.")
     @GetMapping("/{id}")
     public ResponseEntity<SupportTicketDto> getTicketById(
             @AuthenticationPrincipal Long userId,
-            @Parameter(description = "ID of the ticket") @PathVariable Long id) {
+            @Parameter(description = "Biletin ID-si") @PathVariable Long id) {
         SupportTicketDto ticket = ticketService.getTicketById(id);
         // Basic security check: only the owner or an admin (handled in admin controller) can see the ticket
         if (!ticket.getUserId().equals(userId)) {

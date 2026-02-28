@@ -18,17 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/faqs")
 @RequiredArgsConstructor
-@Tag(name = "FAQ", description = "Endpoints for viewing frequently asked questions")
+@Tag(name = "FAQ", description = "Tez-tez verilən suallara baxmaq üçün ucluqlar")
 public class FAQController {
 
     private final FAQService faqService;
 
-    @Operation(summary = "Get all FAQs", description = "Returns a paginated list of all FAQs.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "FAQs retrieved successfully")})
+    @Operation(summary = "Bütün FAQ-ları əldə edin", description = "Bütün FAQ-ların səhifələnmiş siyahısını qaytarır.")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "FAQ-lar uğurla əldə edildi")})
     @GetMapping
     public ResponseEntity<PaginatedResponse<FAQDto>> getAllFAQs(
-            @Parameter(description = "Page index (1-based)") @RequestParam(defaultValue = "1") int page,
-            @Parameter(description = "Items per page") @RequestParam(defaultValue = "10") int size) {
+            @Parameter(description = "Səhifə indeksi (1-dən başlayaraq)") @RequestParam(defaultValue = "1") int page,
+            @Parameter(description = "Hər səhifədəki elementlərin sayı") @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(faqService.getAllFAQs(page, size));
     }
 }

@@ -16,23 +16,23 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/admin/tickets")
 @RequiredArgsConstructor
-@Tag(name = "Support Ticket Admin", description = "Administrative endpoints for managing support tickets")
+@Tag(name = "Support Ticket Admin", description = "Dəstək biletlərini idarə etmək üçün administrativ ucluqlar")
 @SecurityRequirement(name = "bearerAuth")
 @PreAuthorize("hasRole('ADMIN')")
 public class SupportTicketAdminController {
 
     private final SupportTicketService ticketService;
 
-    @Operation(summary = "Get All Tickets (Admin)", description = "Returns all support tickets in the system.")
+    @Operation(summary = "Bütün biletləri əldə edin (Admin)", description = "Sistemdəki bütün dəstək biletlərini qaytarır.")
     @GetMapping
     public ResponseEntity<List<SupportTicketDto>> getAllTickets() {
         return ResponseEntity.ok(ticketService.getAllTickets());
     }
 
-    @Operation(summary = "Update Ticket Status (Admin)", description = "Updates the status of a support ticket.")
+    @Operation(summary = "Bilet statusunu yeniləyin (Admin)", description = "Dəstək biletinin statusunu yeniləyir.")
     @PatchMapping("/{id}/status")
     public ResponseEntity<SupportTicketDto> updateTicketStatus(
-            @Parameter(description = "ID of the ticket") @PathVariable Long id,
+            @Parameter(description = "Biletin ID-si") @PathVariable Long id,
             @RequestParam String status) {
         return ResponseEntity.ok(ticketService.updateTicketStatus(id, status));
     }

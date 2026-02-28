@@ -19,42 +19,42 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/admin/faqs")
 @RequiredArgsConstructor
-@Tag(name = "FAQ Admin", description = "Administrative endpoints for managing FAQs")
+@Tag(name = "FAQ Admin", description = "FAQ-ları idarə etmək üçün administrativ ucluqlar")
 @SecurityRequirement(name = "bearerAuth")
 @PreAuthorize("hasRole('ADMIN')")
 public class FAQAdminController {
 
     private final FAQService faqService;
 
-    @Operation(summary = "Create FAQ (Admin)", description = "Creates a new FAQ. Requires ADMIN role.")
+    @Operation(summary = "FAQ yaradın (Admin)", description = "Yeni FAQ yaradır. ADMIN rolu tələb olunur.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "FAQ created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid request")
+            @ApiResponse(responseCode = "201", description = "FAQ uğurla yaradıldı"),
+            @ApiResponse(responseCode = "400", description = "Yanlış sorğu")
     })
     @PostMapping
     public ResponseEntity<FAQDto> createFAQ(@Valid @RequestBody FAQRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(faqService.createFAQ(request));
     }
 
-    @Operation(summary = "Update FAQ (Admin)", description = "Updates an existing FAQ. Requires ADMIN role.")
+    @Operation(summary = "FAQ-nu yeniləyin (Admin)", description = "Mövcud FAQ-nu yeniləyir. ADMIN rolu tələb olunur.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "FAQ updated successfully"),
-            @ApiResponse(responseCode = "404", description = "FAQ not found")
+            @ApiResponse(responseCode = "200", description = "FAQ uğurla yeniləndi"),
+            @ApiResponse(responseCode = "404", description = "FAQ tapılmadı")
     })
     @PutMapping("/{id}")
     public ResponseEntity<FAQDto> updateFAQ(
-            @Parameter(description = "ID of the FAQ") @PathVariable Long id,
+            @Parameter(description = "FAQ-nun ID-si") @PathVariable Long id,
             @Valid @RequestBody FAQRequest request) {
         return ResponseEntity.ok(faqService.updateFAQ(id, request));
     }
 
-    @Operation(summary = "Delete FAQ (Admin)", description = "Deletes an FAQ. Requires ADMIN role.")
+    @Operation(summary = "FAQ-nu silin (Admin)", description = "FAQ-nu silir. ADMIN rolu tələb olunur.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "FAQ deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "FAQ not found")
+            @ApiResponse(responseCode = "204", description = "FAQ uğurla silindi"),
+            @ApiResponse(responseCode = "404", description = "FAQ tapılmadı")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFAQ(@Parameter(description = "ID of the FAQ to delete") @PathVariable Long id) {
+    public ResponseEntity<Void> deleteFAQ(@Parameter(description = "Silinəcək FAQ-nun ID-si") @PathVariable Long id) {
         faqService.deleteFAQ(id);
         return ResponseEntity.noContent().build();
     }
