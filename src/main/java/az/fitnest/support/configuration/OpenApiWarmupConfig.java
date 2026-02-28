@@ -1,4 +1,4 @@
-package az.fitnest.support.config;
+package az.fitnest.support.configuration;
 
 import org.springdoc.core.properties.SpringDocConfigProperties;
 import org.springdoc.webmvc.api.OpenApiWebMvcResource;

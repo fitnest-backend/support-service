@@ -12,12 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SupportFAQ {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "faq_id")
-    private Long faqId;
+public class SupportFAQ extends BaseEntity {
     
     @Column(name = "question", nullable = false, columnDefinition = "TEXT")
     private String question;

@@ -1,6 +1,6 @@
-package az.fitnest.support.config;
+package az.fitnest.support.configuration;
 
-import az.fitnest.support.supportservice.security.FitnestSecurityFilter;
+import az.fitnest.support.security.FitnestSecurityFilter;
 import lombok.RequiredArgsConstructor;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;

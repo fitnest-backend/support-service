@@ -1,4 +1,4 @@
-package az.fitnest.support.criteria;
+package az.fitnest.support.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AccessLevel;

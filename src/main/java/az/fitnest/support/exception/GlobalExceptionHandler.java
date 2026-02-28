@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import az.fitnest.support.dto.common.ErrorResponse;
+import az.fitnest.support.dto.ErrorResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
