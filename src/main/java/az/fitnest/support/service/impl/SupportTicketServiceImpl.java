@@ -2,7 +2,7 @@ package az.fitnest.support.service.impl;
 
 import az.fitnest.support.dto.SupportTicketDto;
 import az.fitnest.support.dto.SupportTicketRequest;
-import az.fitnest.support.entity.SupportTicket;
+import az.fitnest.support.model.entity.SupportTicket;
 import az.fitnest.support.exception.ResourceNotFoundException;
 import az.fitnest.support.repository.SupportTicketRepository;
 import az.fitnest.support.service.SupportTicketService;

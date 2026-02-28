@@ -3,7 +3,7 @@ package az.fitnest.support.service.impl;
 import az.fitnest.support.dto.FAQDto;
 import az.fitnest.support.dto.FAQRequest;
 import az.fitnest.support.dto.PaginatedResponse;
-import az.fitnest.support.entity.SupportFAQ;
+import az.fitnest.support.model.entity.SupportFAQ;
 import az.fitnest.support.exception.ResourceNotFoundException;
 import az.fitnest.support.repository.SupportFAQRepository;
 import az.fitnest.support.service.FAQService;

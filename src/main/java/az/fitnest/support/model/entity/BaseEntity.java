@@ -1,4 +1,4 @@
-package az.fitnest.support.entity;
+package az.fitnest.support.model.entity;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

@@ -1,6 +1,6 @@
 package az.fitnest.support.repository;
 
-import az.fitnest.support.entity.SupportFAQ;
+import az.fitnest.support.model.entity.SupportFAQ;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
