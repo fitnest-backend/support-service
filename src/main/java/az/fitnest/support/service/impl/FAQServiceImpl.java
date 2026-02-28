@@ -3,6 +3,7 @@ package az.fitnest.support.service.impl;
 import az.fitnest.support.dto.FAQDto;
 import az.fitnest.support.dto.FAQRequest;
 import az.fitnest.support.dto.PaginatedResponse;
+import az.fitnest.support.mapper.FAQMapper;
 import az.fitnest.support.model.entity.SupportFAQ;
 import az.fitnest.support.exception.ResourceNotFoundException;
 import az.fitnest.support.repository.SupportFAQRepository;
@@ -28,7 +29,7 @@ public class FAQServiceImpl implements FAQService {
         Page<SupportFAQ> faqPage = faqRepository.findAll(pageable);
         
         List<FAQDto> items = faqPage.getContent().stream()
-                .map(this::mapToDto)
+                .map(FAQMapper::toDto)
                 .collect(Collectors.toList());
         
         return PaginatedResponse.<FAQDto>builder()
@@ -43,7 +44,7 @@ public class FAQServiceImpl implements FAQService {
     public FAQDto getFAQById(Long id) {
         SupportFAQ faq = faqRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("FAQ not found with id: " + id));
-        return mapToDto(faq);
+        return FAQMapper.toDto(faq);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class FAQServiceImpl implements FAQService {
         faq.setQuestion(request.getQuestion());
         faq.setAnswer(request.getAnswer());
         SupportFAQ saved = faqRepository.save(faq);
-        return mapToDto(saved);
+        return FAQMapper.toDto(saved);
     }
 
     @Override
@@ -65,7 +66,7 @@ public class FAQServiceImpl implements FAQService {
         faq.setQuestion(request.getQuestion());
         faq.setAnswer(request.getAnswer());
         SupportFAQ saved = faqRepository.save(faq);
-        return mapToDto(saved);
+        return FAQMapper.toDto(saved);
     }
 
     @Override
@@ -77,11 +78,4 @@ public class FAQServiceImpl implements FAQService {
         faqRepository.deleteById(id);
     }
 
-    private FAQDto mapToDto(SupportFAQ faq) {
-        return FAQDto.builder()
-                .id(faq.getId())
-                .question(faq.getQuestion())
-                .answer(faq.getAnswer())
-                .build();
-    }
 }
