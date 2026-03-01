@@ -5,7 +5,8 @@ import az.fitnest.support.model.entity.SupportTicket;
 
 public final class SupportTicketMapper {
 
-    private SupportTicketMapper() {}
+    private SupportTicketMapper() {
+    }
 
     public static SupportTicketDto toDto(SupportTicket ticket) {
         if (ticket == null) {

@@ -47,7 +47,7 @@ public class SupportTicketController {
         SupportTicketDto ticket = ticketService.getTicketById(id);
         // Basic security check: only the owner or an admin (handled in admin controller) can see the ticket
         if (!ticket.getUserId().equals(userId)) {
-             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseEntity.ok(ticket);
     }

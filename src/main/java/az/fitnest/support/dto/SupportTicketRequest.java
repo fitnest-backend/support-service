@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class SupportTicketRequest {
     @NotBlank(message = "Topic is required")
     private String topic;
-    
+
     @NotBlank(message = "Message is required")
     private String message;
 }

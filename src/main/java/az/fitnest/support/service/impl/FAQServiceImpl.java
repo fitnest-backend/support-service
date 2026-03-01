@@ -27,11 +27,11 @@ public class FAQServiceImpl implements FAQService {
     public PaginatedResponse<FAQDto> getAllFAQs(int page, int size) {
         PageRequest pageable = PageRequest.of(Math.max(0, page - 1), size);
         Page<SupportFAQ> faqPage = faqRepository.findAll(pageable);
-        
+
         List<FAQDto> items = faqPage.getContent().stream()
                 .map(FAQMapper::toDto)
                 .collect(Collectors.toList());
-        
+
         return PaginatedResponse.<FAQDto>builder()
                 .items(items)
                 .total(faqPage.getTotalElements())
@@ -62,7 +62,7 @@ public class FAQServiceImpl implements FAQService {
     public FAQDto updateFAQ(Long id, FAQRequest request) {
         SupportFAQ faq = faqRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("FAQ not found with id: " + id));
-        
+
         faq.setQuestion(request.getQuestion());
         faq.setAnswer(request.getAnswer());
         SupportFAQ saved = faqRepository.save(faq);

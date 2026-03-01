@@ -13,10 +13,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SupportFAQ extends BaseEntity {
-    
+
     @Column(name = "question", nullable = false, columnDefinition = "TEXT")
     private String question;
-    
+
     @Column(name = "answer", nullable = false, columnDefinition = "TEXT")
     private String answer;
 }

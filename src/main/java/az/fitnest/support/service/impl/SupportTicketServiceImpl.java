@@ -30,7 +30,7 @@ public class SupportTicketServiceImpl implements SupportTicketService {
         ticket.setMessage(request.getMessage());
         ticket.setStatus("OPEN");
         ticket.setCreatedAt(LocalDateTime.now());
-        
+
         SupportTicket saved = ticketRepository.save(ticket);
         return SupportTicketMapper.toDto(saved);
     }

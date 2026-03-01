@@ -5,7 +5,8 @@ import az.fitnest.support.model.entity.SupportFAQ;
 
 public final class FAQMapper {
 
-    private FAQMapper() {}
+    private FAQMapper() {
+    }
 
     public static FAQDto toDto(SupportFAQ faq) {
         if (faq == null) {
