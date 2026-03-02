@@ -51,8 +51,8 @@ public class FAQServiceImpl implements FAQService {
     @Transactional
     public FAQDto createFAQ(FAQRequest request) {
         SupportFAQ faq = new SupportFAQ();
-        faq.setQuestion(request.getQuestion());
-        faq.setAnswer(request.getAnswer());
+        faq.setQuestion(request.question());
+        faq.setAnswer(request.answer());
         SupportFAQ saved = faqRepository.save(faq);
         return FAQMapper.toDto(saved);
     }
@@ -63,8 +63,8 @@ public class FAQServiceImpl implements FAQService {
         SupportFAQ faq = faqRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("FAQ not found with id: " + id));
 
-        faq.setQuestion(request.getQuestion());
-        faq.setAnswer(request.getAnswer());
+        faq.setQuestion(request.question());
+        faq.setAnswer(request.answer());
         SupportFAQ saved = faqRepository.save(faq);
         return FAQMapper.toDto(saved);
     }

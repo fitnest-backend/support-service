@@ -1,17 +1,12 @@
 package az.fitnest.support.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class SupportTicketRequest {
+@Builder
+public record SupportTicketRequest(
     @NotBlank(message = "Topic is required")
-    private String topic;
-
+    String topic,
     @NotBlank(message = "Message is required")
-    private String message;
-}
+    String message
+) {}

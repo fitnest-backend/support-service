@@ -26,8 +26,8 @@ public class SupportTicketServiceImpl implements SupportTicketService {
     public SupportTicketDto createTicket(Long userId, SupportTicketRequest request) {
         SupportTicket ticket = new SupportTicket();
         ticket.setUserId(userId);
-        ticket.setTopic(request.getTopic());
-        ticket.setMessage(request.getMessage());
+        ticket.setTopic(request.topic());
+        ticket.setMessage(request.message());
         ticket.setStatus("OPEN");
         ticket.setCreatedAt(LocalDateTime.now());
 
