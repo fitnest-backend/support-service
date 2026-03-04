@@ -12,8 +12,7 @@ public record PaginatedResponse<T>(
     int pageSize
 ) {
     public static <T> PaginatedResponse<T> of(Page<T> pageResult) {
-        return PaginatedRespons
-        e.<T>builder()
+        return PaginatedResponse.<T>builder()
                 .items(pageResult.getContent())
                 .total(pageResult.getTotalElements())
                 .page(pageResult.getNumber() + 1)
