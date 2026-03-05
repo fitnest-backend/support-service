@@ -43,7 +43,7 @@ public class FAQServiceImpl implements FAQService {
     @Override
     public FAQDto getFAQById(Long id) {
         SupportFAQ faq = faqRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("FAQ not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("error.resource_not_found"));
         return FAQMapper.toDto(faq);
     }
 
@@ -61,7 +61,7 @@ public class FAQServiceImpl implements FAQService {
     @Transactional
     public FAQDto updateFAQ(Long id, FAQRequest request) {
         SupportFAQ faq = faqRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("FAQ not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("error.resource_not_found"));
 
         faq.setQuestion(request.question());
         faq.setAnswer(request.answer());
@@ -73,7 +73,7 @@ public class FAQServiceImpl implements FAQService {
     @Transactional
     public void deleteFAQ(Long id) {
         if (!faqRepository.existsById(id)) {
-            throw new ResourceNotFoundException("FAQ not found with id: " + id);
+            throw new ResourceNotFoundException("error.resource_not_found");
         }
         faqRepository.deleteById(id);
     }
