@@ -43,6 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/swagger-ui.html").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers("/api/v1/support/contactDetails").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex
