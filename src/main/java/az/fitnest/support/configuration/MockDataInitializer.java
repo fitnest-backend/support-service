@@ -1,7 +1,9 @@
 package az.fitnest.support.configuration;
 
+import az.fitnest.support.model.entity.ContactDetails;
 import az.fitnest.support.model.entity.SupportFAQ;
 import az.fitnest.support.model.entity.SupportTicket;
+import az.fitnest.support.repository.ContactDetailsRepository;
 import az.fitnest.support.repository.SupportFAQRepository;
 import az.fitnest.support.repository.SupportTicketRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +21,13 @@ public class MockDataInitializer implements CommandLineRunner {
 
     private final SupportFAQRepository faqRepository;
     private final SupportTicketRepository ticketRepository;
+    private final ContactDetailsRepository contactDetailsRepository;
 
     @Override
     public void run(String... args) {
         initializeFAQs();
         initializeTickets();
+        initializeContactDetails();
     }
 
     private void initializeFAQs() {
@@ -51,6 +55,17 @@ public class MockDataInitializer implements CommandLineRunner {
             );
             ticketRepository.saveAll(tickets);
             log.info("Successfully initialized {} mock tickets.", tickets.size());
+        }
+    }
+
+    private void initializeContactDetails() {
+        if (contactDetailsRepository.count() == 0) {
+            log.info("Initializing default contact details...");
+            ContactDetails contactDetails = new ContactDetails();
+            contactDetails.setEmail("support@fitnest.az");
+            contactDetails.setMobileNumber("+994 50 123 45 67");
+            contactDetailsRepository.save(contactDetails);
+            log.info("Successfully initialized default contact details.");
         }
     }
 }
