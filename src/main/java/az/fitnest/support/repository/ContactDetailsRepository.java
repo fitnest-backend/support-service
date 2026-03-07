@@ -13,4 +13,3 @@ public interface ContactDetailsRepository extends JpaRepository<ContactDetails, 
         return findAll().stream().findFirst();
     }
 }
-

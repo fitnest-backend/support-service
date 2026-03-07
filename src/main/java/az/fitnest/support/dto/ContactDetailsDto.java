@@ -7,4 +7,3 @@ public record ContactDetailsDto(
     @JsonProperty("mobile_number")
     String mobileNumber
 ) {}
-

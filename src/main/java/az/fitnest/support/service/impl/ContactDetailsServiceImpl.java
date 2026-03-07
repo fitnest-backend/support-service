@@ -40,4 +40,3 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
         return new ContactDetailsDto(entity.getEmail(), entity.getMobileNumber());
     }
 }
-

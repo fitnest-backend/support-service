@@ -20,4 +20,3 @@ public class ContactDetails extends BaseAuditableEntity {
     @Column(name = "mobile_number", nullable = false)
     private String mobileNumber;
 }
-

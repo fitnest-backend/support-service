@@ -45,7 +45,6 @@ public class SupportTicketController {
             @AuthenticationPrincipal Long userId,
             @Parameter(description = "Biletin ID-si") @PathVariable Long id) {
         SupportTicketDto ticket = ticketService.getTicketById(id);
-        // Basic security check: only the owner or an admin (handled in admin controller) can see the ticket
         if (!ticket.userId().equals(userId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }

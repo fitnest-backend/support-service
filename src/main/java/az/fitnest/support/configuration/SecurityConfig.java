@@ -48,7 +48,6 @@ public class SecurityConfig {
                 )
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) -> {
-                            // Return 401 Unauthorized for authentication failures
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                             response.setContentType("application/json");
                             String path = request.getRequestURI();
@@ -57,7 +56,6 @@ public class SecurityConfig {
                             response.getWriter().write(json);
                         })
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
-                            // Return 403 Forbidden for authorization failures
                             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                             response.setContentType("application/json");
                             String path = request.getRequestURI();
@@ -70,7 +68,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

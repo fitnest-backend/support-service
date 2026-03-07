@@ -39,4 +39,3 @@ public class ContactDetailsAdminController {
         return ResponseEntity.ok(contactDetailsService.updateContactDetails(request));
     }
 }
-

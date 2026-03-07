@@ -9,4 +9,3 @@ public interface ContactDetailsService {
 
     ContactDetailsDto updateContactDetails(ContactDetailsUpdateRequest request);
 }
-

@@ -31,8 +31,6 @@ public class SupportAdminController {
     private final FAQService faqService;
     private final SupportTicketService ticketService;
 
-    // --- FAQ Administration ---
-
     @Operation(summary = "FAQ yaradın", description = "Yeni FAQ yaradır. ADMIN rolu tələb olunur.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "FAQ uğurla yaradıldı"),
@@ -65,8 +63,6 @@ public class SupportAdminController {
         faqService.deleteFAQ(id);
         return ResponseEntity.noContent().build();
     }
-
-    // --- Ticket Administration ---
 
     @Operation(summary = "Bütün biletləri əldə edin", description = "Sistemdəki bütün dəstək biletlərini qaytarır. ADMIN rolu tələb olunur.")
     @GetMapping("/tickets")

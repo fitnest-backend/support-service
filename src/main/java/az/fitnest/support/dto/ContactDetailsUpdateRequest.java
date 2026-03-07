@@ -18,4 +18,3 @@ public record ContactDetailsUpdateRequest(
     @JsonProperty("mobile_number")
     String mobileNumber
 ) {}
-
