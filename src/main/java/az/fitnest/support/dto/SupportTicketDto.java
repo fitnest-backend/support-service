@@ -10,5 +10,6 @@ public record SupportTicketDto(
     String topic,
     String message,
     String status,
+    @com.fasterxml.jackson.annotation.JsonFormat(pattern = "dd/MM/yyyy")
     LocalDateTime createdAt
 ) {}
