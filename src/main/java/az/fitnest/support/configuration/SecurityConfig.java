@@ -1,6 +1,7 @@
 package az.fitnest.support.configuration;
 
 import az.fitnest.support.security.FitnestSecurityFilter;
+import az.fitnest.support.security.GatewayHeaderFilter;
 import lombok.RequiredArgsConstructor;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +27,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private final FitnestSecurityFilter securityFilter;
+    private final GatewayHeaderFilter gatewayHeaderFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -64,6 +66,7 @@ public class SecurityConfig {
                             response.getWriter().write(json);
                         })
                 )
+                .addFilterBefore(gatewayHeaderFilter, FitnestSecurityFilter.class)
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
