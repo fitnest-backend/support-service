@@ -7,4 +7,3 @@ import java.util.Optional;
 public interface FAQCategoryRepository extends JpaRepository<FAQCategory, Long> {
     Optional<FAQCategory> findByName(String name);
 }
-

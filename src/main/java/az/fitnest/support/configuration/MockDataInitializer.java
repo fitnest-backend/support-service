@@ -36,7 +36,6 @@ public class MockDataInitializer implements CommandLineRunner {
     private void initializeFAQs() {
         if (faqRepository.count() == 0) {
             log.info("Initializing mock FAQs...");
-            // Create categories
             FAQCategory all = faqCategoryRepository.save(FAQCategory.builder().name("ALL").build());
             FAQCategory subscription = faqCategoryRepository.save(FAQCategory.builder().name("SUBSCRIPTION").build());
             FAQCategory payment = faqCategoryRepository.save(FAQCategory.builder().name("PAYMENT").build());

@@ -11,4 +11,3 @@ public interface FAQCategoryService {
     FAQCategoryDto updateCategory(Long id, FAQCategoryRequest request);
     void deleteCategory(Long id);
 }
-
