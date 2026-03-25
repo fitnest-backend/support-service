@@ -7,6 +7,8 @@ import az.fitnest.support.dto.PaginatedResponse;
 public interface FAQService {
     PaginatedResponse<FAQDto> getAllFAQs(int page, int size);
 
+    PaginatedResponse<FAQDto> getAllFAQs(int page, int size, Long categoryId);
+
     FAQDto getFAQById(Long id);
 
     FAQDto createFAQ(FAQRequest request);

@@ -28,7 +28,8 @@ public class FAQController {
     @GetMapping
     public ResponseEntity<PaginatedResponse<FAQDto>> getAllFAQs(
             @Parameter(description = "Səhifə indeksi (1-dən başlayaraq)") @RequestParam(defaultValue = "1") int page,
-            @Parameter(description = "Hər səhifədəki elementlərin sayı") @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(faqService.getAllFAQs(page, size));
+            @Parameter(description = "Hər səhifədəki elementlərin sayı") @RequestParam(defaultValue = "10") int size,
+            @Parameter(description = "FAQ kateqoriyasının ID-si") @RequestParam(required = false) Long categoryId) {
+        return ResponseEntity.ok(faqService.getAllFAQs(page, size, categoryId));
     }
 }
