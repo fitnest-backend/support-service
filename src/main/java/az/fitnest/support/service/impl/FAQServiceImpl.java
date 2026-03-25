@@ -87,4 +87,9 @@ public class FAQServiceImpl implements FAQService {
         faqRepository.deleteById(id);
     }
 
+    @Override
+    public PaginatedResponse<FAQDto> getAllFAQs(int page, int size) {
+        return getAllFAQs(page, size, null);
+    }
+
 }
