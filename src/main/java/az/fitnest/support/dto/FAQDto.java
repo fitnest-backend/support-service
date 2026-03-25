@@ -6,5 +6,6 @@ import lombok.Builder;
 public record FAQDto(
     Long id,
     String question,
-    String answer
+    String answer,
+    FAQCategoryDto category
 ) {}

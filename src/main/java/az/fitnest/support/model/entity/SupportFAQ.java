@@ -19,4 +19,8 @@ public class SupportFAQ extends BaseEntity {
 
     @Column(name = "answer", nullable = false, columnDefinition = "TEXT")
     private String answer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private FAQCategory category;
 }

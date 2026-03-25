@@ -1,9 +1,11 @@
 package az.fitnest.support.configuration;
 
 import az.fitnest.support.model.entity.ContactDetails;
+import az.fitnest.support.model.entity.FAQCategory;
 import az.fitnest.support.model.entity.SupportFAQ;
 import az.fitnest.support.model.entity.SupportTicket;
 import az.fitnest.support.repository.ContactDetailsRepository;
+import az.fitnest.support.repository.FAQCategoryRepository;
 import az.fitnest.support.repository.SupportFAQRepository;
 import az.fitnest.support.repository.SupportTicketRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class MockDataInitializer implements CommandLineRunner {
     private final SupportFAQRepository faqRepository;
     private final SupportTicketRepository ticketRepository;
     private final ContactDetailsRepository contactDetailsRepository;
+    private final FAQCategoryRepository faqCategoryRepository;
 
     @Override
     public void run(String... args) {
@@ -33,12 +36,16 @@ public class MockDataInitializer implements CommandLineRunner {
     private void initializeFAQs() {
         if (faqRepository.count() == 0) {
             log.info("Initializing mock FAQs...");
+            // Create categories
+            FAQCategory all = faqCategoryRepository.save(FAQCategory.builder().name("ALL").build());
+            FAQCategory subscription = faqCategoryRepository.save(FAQCategory.builder().name("SUBSCRIPTION").build());
+            FAQCategory payment = faqCategoryRepository.save(FAQCategory.builder().name("PAYMENT").build());
             List<SupportFAQ> faqs = List.of(
-                    new SupportFAQ("How do I reset my password?", "You can reset your password by clicking 'Forgot Password' on the login screen and following the instructions sent to your email."),
-                    new SupportFAQ("What payment methods do you accept?", "We accept major credit/debit cards (Visa, Mastercard) and Apple Pay/Google Pay through our secure payment gateway."),
-                    new SupportFAQ("Can I cancel my subscription any time?", "Yes, you can cancel your subscription at any time through the 'My Profile' > 'Subscriptions' section. You will retain access until the end of the current billing period."),
-                    new SupportFAQ("How do I contact my trainer?", "Once you have an active fitness plan, you can message your trainer directly through the 'Chat' feature in the mobile app."),
-                    new SupportFAQ("Is my data secure?", "Yes, we use industry-standard encryption and security protocols to protect your personal and health data.")
+                    new SupportFAQ("How do I reset my password?", "You can reset your password by clicking 'Forgot Password' on the login screen and following the instructions sent to your email.", all),
+                    new SupportFAQ("What payment methods do you accept?", "We accept major credit/debit cards (Visa, Mastercard) and Apple Pay/Google Pay through our secure payment gateway.", payment),
+                    new SupportFAQ("Can I cancel my subscription any time?", "Yes, you can cancel your subscription at any time through the 'My Profile' > 'Subscriptions' section. You will retain access until the end of the current billing period.", subscription),
+                    new SupportFAQ("How do I contact my trainer?", "Once you have an active fitness plan, you can message your trainer directly through the 'Chat' feature in the mobile app.", all),
+                    new SupportFAQ("Is my data secure?", "Yes, we use industry-standard encryption and security protocols to protect your personal and health data.", all)
             );
             faqRepository.saveAll(faqs);
             log.info("Successfully initialized {} mock FAQs.", faqs.size());

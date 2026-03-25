@@ -7,6 +7,7 @@ import az.fitnest.support.mapper.FAQMapper;
 import az.fitnest.support.model.entity.SupportFAQ;
 import az.fitnest.support.exception.ResourceNotFoundException;
 import az.fitnest.support.repository.SupportFAQRepository;
+import az.fitnest.support.repository.FAQCategoryRepository;
 import az.fitnest.support.service.FAQService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class FAQServiceImpl implements FAQService {
 
     private final SupportFAQRepository faqRepository;
+    private final FAQCategoryRepository categoryRepository;
 
     @Override
     public PaginatedResponse<FAQDto> getAllFAQs(int page, int size) {
@@ -53,6 +55,8 @@ public class FAQServiceImpl implements FAQService {
         SupportFAQ faq = new SupportFAQ();
         faq.setQuestion(request.question());
         faq.setAnswer(request.answer());
+        faq.setCategory(categoryRepository.findById(request.categoryId())
+            .orElseThrow(() -> new ResourceNotFoundException("Category not found")));
         SupportFAQ saved = faqRepository.save(faq);
         return FAQMapper.toDto(saved);
     }
@@ -65,6 +69,8 @@ public class FAQServiceImpl implements FAQService {
 
         faq.setQuestion(request.question());
         faq.setAnswer(request.answer());
+        faq.setCategory(categoryRepository.findById(request.categoryId())
+            .orElseThrow(() -> new ResourceNotFoundException("Category not found")));
         SupportFAQ saved = faqRepository.save(faq);
         return FAQMapper.toDto(saved);
     }

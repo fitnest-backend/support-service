@@ -16,6 +16,7 @@ public final class FAQMapper {
                 .id(faq.getId())
                 .question(faq.getQuestion())
                 .answer(faq.getAnswer())
+                .category(FAQCategoryMapper.toDto(faq.getCategory()))
                 .build();
     }
 }
