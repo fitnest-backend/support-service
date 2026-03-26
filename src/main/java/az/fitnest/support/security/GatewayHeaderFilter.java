@@ -24,12 +24,10 @@ public class GatewayHeaderFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String path = request.getRequestURI();
-        // Allow actuator, swagger, and openapi docs without gateway header
         if (IGNORED_PATHS.stream().anyMatch(path::startsWith)) {
             filterChain.doFilter(request, response);
             return;
         }
-        // Allow internal gRPC/service calls (e.g. /api/v1/internal)
         if (path.startsWith("/api/v1/internal")) {
             filterChain.doFilter(request, response);
             return;
@@ -46,4 +44,3 @@ public class GatewayHeaderFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
-
