@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-@Component
 public class FitnestSecurityFilter extends OncePerRequestFilter {
 
     @Override

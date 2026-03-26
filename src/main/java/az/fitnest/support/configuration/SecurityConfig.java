@@ -1,3 +1,4 @@
+
 package az.fitnest.support.configuration;
 
 import az.fitnest.support.security.FitnestSecurityFilter;
@@ -25,6 +26,11 @@ import java.util.List;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    @Bean
+    public FitnestSecurityFilter fitnestSecurityFilter() {
+        return new FitnestSecurityFilter();
+    }
 
     private final FitnestSecurityFilter securityFilter;
     private final GatewayHeaderFilter gatewayHeaderFilter;
