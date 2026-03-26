@@ -27,10 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Bean
-    public FitnestSecurityFilter fitnestSecurityFilter() {
-        return new FitnestSecurityFilter();
-    }
+    // Removed @Bean for fitnestSecurityFilter; rely on component scanning
 
     private final FitnestSecurityFilter securityFilter;
     private final GatewayHeaderFilter gatewayHeaderFilter;
