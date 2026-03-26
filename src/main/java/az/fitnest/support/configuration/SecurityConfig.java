@@ -1,4 +1,3 @@
-
 package az.fitnest.support.configuration;
 
 import az.fitnest.support.security.FitnestSecurityFilter;
@@ -26,8 +25,6 @@ import java.util.List;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-
-    // Removed @Bean for fitnestSecurityFilter; rely on component scanning
 
     private final FitnestSecurityFilter securityFilter;
     private final GatewayHeaderFilter gatewayHeaderFilter;
@@ -69,7 +66,7 @@ public class SecurityConfig {
                             response.getWriter().write(json);
                         })
                 )
-                .addFilterBefore(gatewayHeaderFilter, FitnestSecurityFilter.class)
+                .addFilterBefore(gatewayHeaderFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
