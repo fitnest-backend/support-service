@@ -161,3 +161,9 @@ springdoc:
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
   writer-with-default-pretty-printer: false
+
+logging:
+  level:
+    root: DEBUG
+    org.springframework: DEBUG
+    az.fitnest: DEBUG
