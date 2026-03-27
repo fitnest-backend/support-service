@@ -28,18 +28,17 @@ public class GatewayHeaderFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        // Only enforce X-From-Gateway for /api/v1/internal endpoints (optional, can be removed if not needed)
         if (path.startsWith("/api/v1/internal")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-        String gatewayHeader = request.getHeader(GATEWAY_HEADER);
-        if (!GATEWAY_HEADER_VALUE.equals(gatewayHeader)) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.setContentType("application/json");
-            String timestamp = java.time.OffsetDateTime.now().toString();
-            String json = String.format("{\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"Requests must come via API Gateway\",\"status\":403,\"path\":\"%s\",\"timestamp\":\"%s\"}}", path, timestamp);
-            response.getWriter().write(json);
-            return;
+            String gatewayHeader = request.getHeader(GATEWAY_HEADER);
+            if (!GATEWAY_HEADER_VALUE.equals(gatewayHeader)) {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                response.setContentType("application/json");
+                String timestamp = java.time.OffsetDateTime.now().toString();
+                String json = String.format("{\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"Requests must come via API Gateway\",\"status\":403,\"path\":\"%s\",\"timestamp\":\"%s\"}}", path, timestamp);
+                response.getWriter().write(json);
+                return;
+            }
         }
         filterChain.doFilter(request, response);
     }
