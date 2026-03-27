@@ -28,12 +28,7 @@ public class FAQServiceImpl implements FAQService {
     @Override
     public PaginatedResponse<FAQDto> getAllFAQs(int page, int size, Long categoryId) {
         PageRequest pageable = PageRequest.of(Math.max(0, page - 1), size);
-        Page<SupportFAQ> faqPage;
-        if (categoryId != null) {
-            faqPage = faqRepository.findAllByCategory_Id(categoryId, pageable);
-        } else {
-            faqPage = faqRepository.findAll(pageable);
-        }
+        Page<SupportFAQ> faqPage = faqRepository.findAllWithCategory(categoryId, pageable);
         List<FAQDto> items = faqPage.getContent().stream()
                 .map(FAQMapper::toDto)
                 .collect(Collectors.toList());
