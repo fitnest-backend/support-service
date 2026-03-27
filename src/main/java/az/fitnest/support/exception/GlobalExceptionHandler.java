@@ -18,8 +18,12 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.context.request.WebRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     private final MessageSource messageSource;
 
@@ -29,6 +33,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<ApiResponse<Void>> handleBaseException(BaseException exception, WebRequest request) {
+        log.error("BaseException: {}", exception.getMessage(), exception);
 
         Map<String, Object> details = null;
         if (exception instanceof ValidationException validationException) {
@@ -57,6 +62,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Void>> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, WebRequest request) {
+        log.error("MethodArgumentNotValidException: {}", exception.getMessage(), exception);
         BindingResult result = exception.getBindingResult();
         Map<String, String> validationErrors = new HashMap<>();
         for (FieldError error : result.getFieldErrors()) {
@@ -77,6 +83,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiResponse<Void>> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception, WebRequest request) {
+        log.error("HttpMessageNotReadableException: {}", exception.getMessage(), exception);
         ApiError apiError = ApiError.builder()
                 .code("HTTP_MESSAGE_NOT_READABLE")
                 .message(getMessage("error.invalid_json_format"))
@@ -90,6 +97,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiResponse<Void>> handleRuntimeException(RuntimeException ex, WebRequest request) {
+        log.error("RuntimeException: {}", ex.getMessage(), ex);
         ApiError apiError = ApiError.builder()
                 .code("RUNTIME_EXCEPTION")
                 .message(getMessage("error.unexpected"))
@@ -103,6 +111,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGenericException(Exception ex, WebRequest request) {
+        log.error("Exception: {}", ex.getMessage(), ex);
         ApiError apiError = ApiError.builder()
                 .code("INTERNAL_SERVER_ERROR")
                 .message(getMessage("error.internal_server_error"))
