@@ -2,6 +2,7 @@ package az.fitnest.support.service.impl;
 
 import az.fitnest.support.dto.ContactDetailsDto;
 import az.fitnest.support.dto.ContactDetailsUpdateRequest;
+import az.fitnest.support.exception.ConflictException;
 import az.fitnest.support.exception.ResourceNotFoundException;
 import az.fitnest.support.model.entity.ContactDetails;
 import az.fitnest.support.repository.ContactDetailsRepository;
@@ -20,6 +21,21 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
     public ContactDetailsDto getContactDetails() {
         ContactDetails entity = contactDetailsRepository.findSingleton()
                 .orElseThrow(() -> new ResourceNotFoundException("Contact details not found"));
+        return toDto(entity);
+    }
+
+    @Transactional
+    @Override
+    public ContactDetailsDto createContactDetails(ContactDetailsUpdateRequest request) {
+        if (contactDetailsRepository.count() > 0) {
+            throw new ConflictException("Contact details already exist. Only one record is allowed.");
+        }
+
+        ContactDetails entity = new ContactDetails();
+        entity.setEmail(request.email());
+        entity.setMobileNumber(request.mobileNumber());
+        contactDetailsRepository.save(entity);
+
         return toDto(entity);
     }
 

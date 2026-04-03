@@ -7,5 +7,7 @@ public interface ContactDetailsService {
 
     ContactDetailsDto getContactDetails();
 
+    ContactDetailsDto createContactDetails(ContactDetailsUpdateRequest request);
+
     ContactDetailsDto updateContactDetails(ContactDetailsUpdateRequest request);
 }

@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class ContactDetailsAdminController {
 
     private final ContactDetailsService contactDetailsService;
+
+    @Operation(summary = "Əlaqə məlumatlarını yaradın", description = "Təşkilatın əlaqə məlumatlarını yaradır. Yalnız bir rekord yaradıla bilər. ADMIN rolu tələb olunur.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Əlaqə məlumatları uğurla yaradıldı"),
+            @ApiResponse(responseCode = "400", description = "Yanlış sorğu"),
+            @ApiResponse(responseCode = "409", description = "Əlaqə məlumatları artıq mövcuddur")
+    })
+    @PostMapping("/contact-details")
+    public ResponseEntity<ContactDetailsDto> createContactDetails(
+            @Valid @RequestBody ContactDetailsUpdateRequest request) {
+        return ResponseEntity.ok(contactDetailsService.createContactDetails(request));
+    }
 
     @Operation(summary = "Əlaqə məlumatlarını yeniləyin", description = "Təşkilatın əlaqə məlumatlarını yeniləyir. ADMIN rolu tələb olunur.")
     @ApiResponses(value = {
