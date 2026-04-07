@@ -1,7 +1,8 @@
 package az.fitnest.support.controller;
-
+ 
  import az.fitnest.support.dto.ApiResponse;
  import az.fitnest.support.dto.CreateTranslationRequest;
+ import az.fitnest.support.exception.ConflictException;
  import az.fitnest.support.model.entity.Translation;
  import az.fitnest.support.repository.TranslationRepository;
  import io.swagger.v3.oas.annotations.Operation;
@@ -12,46 +13,44 @@ package az.fitnest.support.controller;
  import lombok.RequiredArgsConstructor;
  import org.springframework.http.ResponseEntity;
  import org.springframework.web.bind.annotation.*;
-
+ 
  import java.util.List;
-
+ 
  @RestController
  @RequestMapping("/api/v1/admin/translations")
  @RequiredArgsConstructor
  @Tag(name = "Translation Management", description = "Endpoints for managing translations")
  public class TranslationController {
      private final TranslationRepository translationRepository;
-
-     @Operation(summary = "Create or update translation", description = "Creates a new translation or updates an existing one for the given entity, language, and field.")
+ 
+     @Operation(summary = "Create translation", description = "Creates a new translation for the given entity, language, and field.")
      @ApiResponses(value = {
-             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Translation successfully created/updated",
-                     content = @Content(schema = @Schema(implementation = Translation.class)))
+             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Translation successfully created",
+                     content = @Content(schema = @Schema(implementation = Translation.class))),
+             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "Translation already exists")
      })
      @PostMapping
-     public ResponseEntity<ApiResponse<Translation>> createOrUpdateTranslation(@RequestBody CreateTranslationRequest request) {
+     public ResponseEntity<ApiResponse<Translation>> createTranslation(@RequestBody CreateTranslationRequest request) {
          String normalizedEntityType = request.entityType().toUpperCase();
          Translation existing = translationRepository.findByEntityTypeAndEntityIdAndLanguageCodeAndFieldName(
                  normalizedEntityType, request.entityId(), request.languageCode().toUpperCase(), request.fieldName()
          ).orElse(null);
-
+ 
          if (existing != null) {
-             existing.setFieldValue(request.fieldValue());
-             existing.setEntityType(normalizedEntityType);
-             Translation saved = translationRepository.save(existing);
-             return ResponseEntity.ok(ApiResponse.success(saved));
-         } else {
-             Translation translation = Translation.builder()
-                     .entityType(normalizedEntityType)
-                     .entityId(request.entityId())
-                     .languageCode(request.languageCode().toUpperCase())
-                     .fieldName(request.fieldName())
-                     .fieldValue(request.fieldValue())
-                     .build();
-             Translation saved = translationRepository.save(translation);
-             return ResponseEntity.ok(ApiResponse.success(saved));
+             throw new ConflictException("Translation for this field already exists", "TRANSLATION_ALREADY_EXISTS");
          }
+ 
+         Translation translation = Translation.builder()
+                 .entityType(normalizedEntityType)
+                 .entityId(request.entityId())
+                 .languageCode(request.languageCode().toUpperCase())
+                 .fieldName(request.fieldName())
+                 .fieldValue(request.fieldValue())
+                 .build();
+         Translation saved = translationRepository.save(translation);
+         return ResponseEntity.ok(ApiResponse.success(saved));
      }
-
+ 
      @DeleteMapping("/{id}")
      public ResponseEntity<Void> deleteTranslation(@PathVariable Long id) {
          if (!translationRepository.existsById(id)) {
@@ -60,7 +59,7 @@ package az.fitnest.support.controller;
          translationRepository.deleteById(id);
          return ResponseEntity.noContent().build();
      }
-
+ 
      @GetMapping
      public ResponseEntity<List<Translation>> getTranslations(
              @RequestParam(required = false) String entityType,
