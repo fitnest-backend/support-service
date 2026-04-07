@@ -9,6 +9,9 @@ import az.fitnest.support.exception.ResourceNotFoundException;
 import az.fitnest.support.repository.SupportFAQRepository;
 import az.fitnest.support.repository.FAQCategoryRepository;
 import az.fitnest.support.service.FAQService;
+import az.fitnest.support.service.TranslationService;
+import az.fitnest.support.client.UserServiceGrpcClient;
+import az.fitnest.support.dto.FAQCategoryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,13 +27,16 @@ public class FAQServiceImpl implements FAQService {
 
     private final SupportFAQRepository faqRepository;
     private final FAQCategoryRepository categoryRepository;
+    private final TranslationService translationService;
+    private final UserServiceGrpcClient userServiceGrpcClient;
 
     @Override
     public PaginatedResponse<FAQDto> getAllFAQs(int page, int size, Long categoryId) {
+        String language = resolveUserLanguage();
         PageRequest pageable = PageRequest.of(Math.max(0, page - 1), size);
         Page<SupportFAQ> faqPage = faqRepository.findAllWithCategory(categoryId, pageable);
         List<FAQDto> items = faqPage.getContent().stream()
-                .map(FAQMapper::toDto)
+                .map(faq -> mapToDto(faq, language))
                 .collect(Collectors.toList());
         return PaginatedResponse.<FAQDto>builder()
                 .items(items)
@@ -42,9 +48,10 @@ public class FAQServiceImpl implements FAQService {
 
     @Override
     public FAQDto getFAQById(Long id) {
+        String language = resolveUserLanguage();
         SupportFAQ faq = faqRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("error.resource_not_found"));
-        return FAQMapper.toDto(faq);
+        return mapToDto(faq, language);
     }
 
     @Override
@@ -87,4 +94,44 @@ public class FAQServiceImpl implements FAQService {
         return getAllFAQs(page, size, null);
     }
 
+    private FAQDto mapToDto(SupportFAQ faq, String language) {
+        String localizedQuestion = translationService.getTranslatedValue("SUPPORT_FAQ", String.valueOf(faq.getId()), "question", language);
+        if (localizedQuestion == null || localizedQuestion.isBlank()) {
+            localizedQuestion = faq.getQuestion();
+        }
+
+        String localizedAnswer = translationService.getTranslatedValue("SUPPORT_FAQ", String.valueOf(faq.getId()), "answer", language);
+        if (localizedAnswer == null || localizedAnswer.isBlank()) {
+            localizedAnswer = faq.getAnswer();
+        }
+
+        String localizedCategoryName = translationService.getTranslatedValue("FAQ_CATEGORY", String.valueOf(faq.getCategory().getId()), "name", language);
+        if (localizedCategoryName == null || localizedCategoryName.isBlank()) {
+            localizedCategoryName = faq.getCategory().getName();
+        }
+
+        return FAQDto.builder()
+                .id(faq.getId())
+                .question(localizedQuestion)
+                .answer(localizedAnswer)
+                .category(FAQCategoryDto.builder()
+                        .id(faq.getCategory().getId())
+                        .name(localizedCategoryName)
+                        .build())
+                .build();
+    }
+
+    private String resolveUserLanguage() {
+        Long userId = az.fitnest.support.util.UserContext.getCurrentUserId();
+        if (userId != null) {
+            try {
+                var user = userServiceGrpcClient.getUserById(userId);
+                if (user != null && user.getLanguage() != null && !user.getLanguage().isBlank()) {
+                    return user.getLanguage().toUpperCase();
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        return "AZ";
+    }
 }

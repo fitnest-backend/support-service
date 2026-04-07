@@ -6,6 +6,8 @@ import az.fitnest.support.mapper.FAQCategoryMapper;
 import az.fitnest.support.model.entity.FAQCategory;
 import az.fitnest.support.repository.FAQCategoryRepository;
 import az.fitnest.support.service.FAQCategoryService;
+import az.fitnest.support.service.TranslationService;
+import az.fitnest.support.client.UserServiceGrpcClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,19 +17,48 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FAQCategoryServiceImpl implements FAQCategoryService {
     private final FAQCategoryRepository categoryRepository;
+    private final TranslationService translationService;
+    private final UserServiceGrpcClient userServiceGrpcClient;
 
     @Override
     public List<FAQCategoryDto> getAllCategories() {
+        String language = resolveUserLanguage();
         return categoryRepository.findAll().stream()
-                .map(FAQCategoryMapper::toDto)
+                .map(category -> mapToDto(category, language))
                 .toList();
     }
 
     @Override
     public FAQCategoryDto getCategoryById(Long id) {
+        String language = resolveUserLanguage();
         FAQCategory category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
-        return FAQCategoryMapper.toDto(category);
+        return mapToDto(category, language);
+    }
+
+    private FAQCategoryDto mapToDto(FAQCategory category, String language) {
+        String localizedName = translationService.getTranslatedValue("FAQ_CATEGORY", String.valueOf(category.getId()), "name", language);
+        if (localizedName == null || localizedName.isBlank()) {
+            localizedName = category.getName();
+        }
+        return FAQCategoryDto.builder()
+                .id(category.getId())
+                .name(localizedName)
+                .build();
+    }
+
+    private String resolveUserLanguage() {
+        Long userId = az.fitnest.support.util.UserContext.getCurrentUserId();
+        if (userId != null) {
+            try {
+                var user = userServiceGrpcClient.getUserById(userId);
+                if (user != null && user.getLanguage() != null && !user.getLanguage().isBlank()) {
+                    return user.getLanguage().toUpperCase();
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        return "AZ";
     }
 
     @Override
