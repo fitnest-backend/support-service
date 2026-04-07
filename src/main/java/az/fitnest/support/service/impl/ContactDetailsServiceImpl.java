@@ -28,7 +28,7 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
     @Override
     public ContactDetailsDto createContactDetails(ContactDetailsUpdateRequest request) {
         if (contactDetailsRepository.count() > 0) {
-            throw new ConflictException("Contact details already exist. Only one record is allowed.");
+            throw new ConflictException("CONTACT_DETAILS_ALREADY_EXISTS", "Contact details already exist. Only one record is allowed.");
         }
 
         ContactDetails entity = new ContactDetails();
