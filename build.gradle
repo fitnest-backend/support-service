@@ -26,7 +26,7 @@ dependencyManagement {
 }
 
 bootJar {
-    archiveFileName = "support-service.jar"
+    archiveFileName = "support-backend.jar"
 }
 
 dependencies {
