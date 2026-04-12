@@ -19,7 +19,7 @@ spring:
     virtual:
       enabled: true
   application:
-    name: support-service
+    name: support-backend   # ✅ Changed from support-service
   main:
     lazy-initialization: ${SPRING_MAIN_LAZY_INITIALIZATION:true}
   messages:
@@ -29,26 +29,26 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME:fitnest_support}
     password: ${SPRING_DATASOURCE_PASSWORD:support_password_123}
     driver-class-name: org.postgresql.Driver
-  hikari:
-    connection-timeout: 30000
-    idle-timeout: 600000
-    max-lifetime: 1800000
-    keep-alive-time: 300000
-    minimum-idle: ${HIKARI_MIN_IDLE:2}
-    maximum-pool-size: ${HIKARI_MAX_POOL:15}
-    pool-name: HikariCP-Support
-    auto-commit: true
-    connection-test-query: SELECT 1
-    data-source-properties:
-      cachePrepStmts: true
-      prepStmtCacheSize: 250
-      prepStmtCacheSqlLimit: 2048
-      useServerPrepStmts: true
-      useLocalSessionState: true
-      rewriteBatchedStatements: true
-      cacheResultSetMetadata: true
-      cacheServerConfiguration: true
-      elideSetAutoCommits: true
+    hikari:
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      keep-alive-time: 300000
+      minimum-idle: ${HIKARI_MIN_IDLE:2}
+      maximum-pool-size: ${HIKARI_MAX_POOL:15}
+      pool-name: HikariCP-Support
+      auto-commit: true
+      connection-test-query: SELECT 1
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+        useLocalSessionState: true
+        rewriteBatchedStatements: true
+        cacheResultSetMetadata: true
+        cacheServerConfiguration: true
+        elideSetAutoCommits: true
   jpa:
     hibernate:
       ddl-auto: update
@@ -113,18 +113,18 @@ jwt:
   secret: ${JWT_SECRET:your-jwt-secret-change-in-production}
   issuer: ${JWT_ISSUER:fitnest}
 
-# Service URLs
+# ✅ Updated service URLs
 iam:
   service:
-    url: ${IDENTITY_SERVICE_URL:http://identity-service:8080}
+    url: ${IDENTITY_SERVICE_URL:http://identity-backend:8080}
 
 user:
   service:
-    url: ${USER_SERVICE_URL:http://user-service:8080}
+    url: ${USER_SERVICE_URL:http://user-backend:8080}
 
 media:
   service:
-    url: ${STORAGE_SERVICE_URL:http://storage-service:8080}
+    url: ${STORAGE_SERVICE_URL:http://storage-backend:8080}
 
 app:
   security:
@@ -164,8 +164,9 @@ springdoc:
 
 grpc:
   client:
-    user-service:
-      address: 'dns:///user-service.fitnest-dev.svc.cluster.local:9090'
+    # ✅ Updated gRPC client from user-service to user-backend
+    user-backend:
+      address: 'dns:///user-backend.fitnest-dev.svc.cluster.local:9090'
       negotiation-type: plaintext
 
 logging:
@@ -173,3 +174,5 @@ logging:
     root: DEBUG
     org.springframework: DEBUG
     az.fitnest: DEBUG
+  file:
+    name: logs/support-backend.log   # ✅ Optional: updated log file name
