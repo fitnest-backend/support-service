@@ -81,7 +81,7 @@ public class SecurityConfig {
     }
     @Bean
     public org.springframework.security.access.hierarchicalroles.RoleHierarchy roleHierarchy() {
-        return org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl.fromHierarchy("ROLE_SUPER_ADMIN > ROLE_ADMIN\nROLE_ADMIN > ROLE_USER");
+        return org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl.fromHierarchy("ROLE_ADMIN > ROLE_USER");
     }
 
     @Bean

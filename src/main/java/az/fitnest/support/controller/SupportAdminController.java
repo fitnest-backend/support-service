@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/admin/support")
 @RequiredArgsConstructor
-@Tag(name = "Support Admin", description = "Dəstək biletləri və FAQ-ları idarə etmək üçün administrativ ucluqlar. Bu ucluqlar yalnız ADMIN və SUPER_ADMIN rollarına malik istifadəçilər tərəfindən istifadə edilə bilər.")
+@Tag(name = "Support Admin", description = "Dəstək biletləri və FAQ-ları idarə etmək üçün administrativ ucluqlar. Bu ucluqlar yalnız ADMIN roluna malik istifadəçilər tərəfindən istifadə edilə bilər.")
 @SecurityRequirement(name = "bearerAuth")
 @PreAuthorize("hasRole('ADMIN')")
 public class SupportAdminController {
