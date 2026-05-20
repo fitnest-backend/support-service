@@ -14,4 +14,6 @@ public interface SupportFAQRepository extends JpaRepository<SupportFAQ, Long> {
 
     @Query("SELECT f FROM SupportFAQ f JOIN FETCH f.category WHERE (:categoryId IS NULL OR f.category.id = :categoryId)")
     Page<SupportFAQ> findAllWithCategory(@Param("categoryId") Long categoryId, Pageable pageable);
+
+    boolean existsByCategoryId(Long categoryId);
 }
