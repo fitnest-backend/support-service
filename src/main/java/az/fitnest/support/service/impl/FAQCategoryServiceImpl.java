@@ -5,9 +5,11 @@ import az.fitnest.support.dto.FAQCategoryRequest;
 import az.fitnest.support.mapper.FAQCategoryMapper;
 import az.fitnest.support.model.entity.FAQCategory;
 import az.fitnest.support.repository.FAQCategoryRepository;
+import az.fitnest.support.repository.SupportFAQRepository;
 import az.fitnest.support.service.FAQCategoryService;
 import az.fitnest.support.service.TranslationService;
 import az.fitnest.support.client.UserServiceGrpcClient;
+import az.fitnest.support.exception.ConflictException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FAQCategoryServiceImpl implements FAQCategoryService {
     private final FAQCategoryRepository categoryRepository;
+    private final SupportFAQRepository faqRepository;
     private final TranslationService translationService;
     private final UserServiceGrpcClient userServiceGrpcClient;
 
@@ -82,6 +85,9 @@ public class FAQCategoryServiceImpl implements FAQCategoryService {
     @Override
     @Transactional
     public void deleteCategory(Long id) {
+        if (faqRepository.existsByCategoryId(id)) {
+            throw new ConflictException("Category cannot be deleted because it has associated FAQs", "CATEGORY_HAS_FAQS");
+        }
         categoryRepository.deleteById(id);
     }
 }
