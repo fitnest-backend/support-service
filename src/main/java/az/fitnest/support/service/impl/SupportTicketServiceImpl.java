@@ -82,6 +82,14 @@ public class SupportTicketServiceImpl implements SupportTicketService {
     }
 
     private String resolveUserLanguage() {
+        try {
+            String localeLang = org.springframework.context.i18n.LocaleContextHolder.getLocale().getLanguage()
+                    .toUpperCase();
+            if (localeLang.equals("EN") || localeLang.equals("RU") || localeLang.equals("AZ")) {
+                return localeLang;
+            }
+        } catch (Exception ignored) {
+        }
         Long userId = az.fitnest.support.util.UserContext.getCurrentUserId();
         if (userId != null) {
             try {
