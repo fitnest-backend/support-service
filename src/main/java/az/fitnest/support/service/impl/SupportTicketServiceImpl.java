@@ -20,6 +20,8 @@ import java.util.stream.Collectors;
 public class SupportTicketServiceImpl implements SupportTicketService {
 
     private final SupportTicketRepository ticketRepository;
+    private final az.fitnest.support.service.TranslationService translationService;
+    private final az.fitnest.support.client.UserServiceGrpcClient userServiceGrpcClient;
 
     @Override
     @Transactional
@@ -32,20 +34,20 @@ public class SupportTicketServiceImpl implements SupportTicketService {
         ticket.setCreatedAt(LocalDateTime.now());
 
         SupportTicket saved = ticketRepository.save(ticket);
-        return SupportTicketMapper.toDto(saved);
+        return mapToDto(saved);
     }
 
     @Override
     public List<SupportTicketDto> getUserTickets(Long userId) {
         return ticketRepository.findByUserId(userId).stream()
-                .map(SupportTicketMapper::toDto)
+                .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<SupportTicketDto> getAllTickets() {
         return ticketRepository.findAll().stream()
-                .map(SupportTicketMapper::toDto)
+                .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
 
@@ -56,14 +58,41 @@ public class SupportTicketServiceImpl implements SupportTicketService {
                 .orElseThrow(() -> new ResourceNotFoundException("Ticket not found with id: " + id));
         ticket.setStatus(status);
         SupportTicket saved = ticketRepository.save(ticket);
-        return SupportTicketMapper.toDto(saved);
+        return mapToDto(saved);
     }
 
     @Override
     public SupportTicketDto getTicketById(Long id) {
         SupportTicket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Ticket not found with id: " + id));
-        return SupportTicketMapper.toDto(ticket);
+        return mapToDto(ticket);
+    }
+
+    private SupportTicketDto mapToDto(SupportTicket ticket) {
+        if (ticket == null) {
+            return null;
+        }
+        String originalStatus = ticket.getStatus();
+        String userLanguage = resolveUserLanguage();
+        String translatedStatus = (originalStatus != null) ? translationService.getTranslatedValue("SUPPORT_TICKET_STATUS", originalStatus, "name", userLanguage) : null;
+        if (translatedStatus == null || translatedStatus.isEmpty()) {
+            translatedStatus = originalStatus;
+        }
+        return SupportTicketMapper.toDto(ticket, translatedStatus);
+    }
+
+    private String resolveUserLanguage() {
+        Long userId = az.fitnest.support.util.UserContext.getCurrentUserId();
+        if (userId != null) {
+            try {
+                var user = userServiceGrpcClient.getUserById(userId);
+                if (user != null && user.getLanguage() != null && !user.getLanguage().isBlank()) {
+                    return user.getLanguage().toUpperCase();
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        return "AZ";
     }
 
 }
