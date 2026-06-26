@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface SupportTicketRepository extends JpaRepository<SupportTicket, Long> {
     List<SupportTicket> findByUserId(Long userId);
+
+    void deleteByUserId(Long userId);
 }
