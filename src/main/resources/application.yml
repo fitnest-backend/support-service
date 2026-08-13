@@ -184,8 +184,8 @@ grpc:
 
 logging:
   level:
-    root: DEBUG
-    org.springframework: DEBUG
-    az.fitnest: DEBUG
+    root: WARN
+    org.springframework: WARN
+    az.fitnest: WARN
   file:
     name: logs/support-backend.log   # ✅ Optional: updated log file name
