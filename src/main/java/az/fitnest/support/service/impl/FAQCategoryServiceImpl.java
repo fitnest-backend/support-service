@@ -11,6 +11,7 @@ import az.fitnest.support.service.TranslationService;
 import az.fitnest.support.client.UserServiceGrpcClient;
 import az.fitnest.support.exception.ConflictException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -26,7 +27,7 @@ public class FAQCategoryServiceImpl implements FAQCategoryService {
     @Override
     public List<FAQCategoryDto> getAllCategories() {
         String language = resolveUserLanguage();
-        return categoryRepository.findAll().stream()
+        return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "id")).stream()
                 .map(category -> mapToDto(category, language))
                 .toList();
     }

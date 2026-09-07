@@ -31,6 +31,14 @@ public class FAQServiceImpl implements FAQService {
     private final UserServiceGrpcClient userServiceGrpcClient;
 
     @Override
+    public List<FAQDto> getPublicFaqs() {
+        String language = resolveUserLanguage();
+        return faqRepository.findAllFetched().stream()
+                .map(faq -> mapToDto(faq, language))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public PaginatedResponse<FAQDto> getAllFAQs(int page, int size, Long categoryId) {
         String language = resolveUserLanguage();
         PageRequest pageable = PageRequest.of(Math.max(0, page - 1), size);
@@ -105,19 +113,24 @@ public class FAQServiceImpl implements FAQService {
             localizedAnswer = faq.getAnswer();
         }
 
-        String localizedCategoryName = translationService.getTranslatedValue("FAQ_CATEGORY", String.valueOf(faq.getCategory().getId()), "name", language);
-        if (localizedCategoryName == null || localizedCategoryName.isBlank()) {
-            localizedCategoryName = faq.getCategory().getName();
+        FAQCategoryDto categoryDto = null;
+        if (faq.getCategory() != null) {
+            String localizedCategoryName = translationService.getTranslatedValue(
+                    "FAQ_CATEGORY", String.valueOf(faq.getCategory().getId()), "name", language);
+            if (localizedCategoryName == null || localizedCategoryName.isBlank()) {
+                localizedCategoryName = faq.getCategory().getName();
+            }
+            categoryDto = FAQCategoryDto.builder()
+                    .id(faq.getCategory().getId())
+                    .name(localizedCategoryName)
+                    .build();
         }
 
         return FAQDto.builder()
                 .id(faq.getId())
                 .question(localizedQuestion)
                 .answer(localizedAnswer)
-                .category(FAQCategoryDto.builder()
-                        .id(faq.getCategory().getId())
-                        .name(localizedCategoryName)
-                        .build())
+                .category(categoryDto)
                 .build();
     }
 

@@ -4,7 +4,11 @@ import az.fitnest.support.dto.FAQDto;
 import az.fitnest.support.dto.FAQRequest;
 import az.fitnest.support.dto.PaginatedResponse;
 
+import java.util.List;
+
 public interface FAQService {
+    List<FAQDto> getPublicFaqs();
+
     PaginatedResponse<FAQDto> getAllFAQs(int page, int size);
 
     PaginatedResponse<FAQDto> getAllFAQs(int page, int size, Long categoryId);
